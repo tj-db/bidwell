@@ -1823,7 +1823,6 @@ document.getElementById('closeModal').addEventListener('click', function() {
   document.getElementById('termsModal').style.display = 'none';
 });
 
-
 document.getElementById('deleteProfile').addEventListener('click', function() {
   localStorage.removeItem('OWNER_ID');
   localStorage.removeItem('CONTACT_ID');
@@ -2101,7 +2100,7 @@ function fetchProducts() {
           }
         }, 1000);
 
-        productCard.querySelector('.bid-form').addEventListener('submit', function(e) {
+productCard.querySelector('.bid-form').addEventListener('submit', function(e) {
           e.preventDefault();
 
           const favoriteElement = productCard.querySelector('.favorite');
@@ -2133,47 +2132,33 @@ function fetchProducts() {
             feedbackElement.style.color = 'green';
 
             const bidTime = getUTCTimestamp();
-            const productID1 = productCard.querySelector('.product-id').textContent.trim();
-            const contactId = localStorage.getItem('CONTACT_ID');
-            const contactId2 = localStorage.getItem('COUNTRY_CODE');
-            const contactDetails = `(${contactId2}) ${contactId}`;
-
-            const bidData = {
-              productID: productID1,
+            const bidFileName = `${productID}_${ownerId}_${bidTime}.json`;
+            const bidFileContent = {
               amount: bidAmount,
               buyer: ownerId,
               timeStamp: bidTime,
-              contactDetails: contactDetails
+              contactDetails: `(${localStorage.getItem('COUNTRY_CODE')}) ${localStorage.getItem('CONTACT_ID')}`
             };
 
-            const bidFileName = `${productID1}_${ownerId}_${bidTime}.json`;
-            const bidFileContent = JSON.stringify(bidData, null, 2);
-            const encodedContent = btoa(bidFileContent);
+            const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSedXhoMdPFOcsIKw-INyr1TZZkfdr9E7POXo9I3Lvl1c0eQOg/formResponse";
 
-            fetch(`https://api.github.com/repos/${llllDB}/contents/${bidFileName}`, {
-              method: 'PUT',
-              headers: {
-                'Authorization': `token ${moo2}`,
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                message: `Add bid data to ${bidFileName}`,
-                content: encodedContent
-              })
-            })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              return response.json();
+            const formData = new URLSearchParams();
+            formData.append("entry.1354272229", bidFileName);
+            formData.append("entry.908877255", JSON.stringify(bidFileContent));
+
+            fetch(googleFormURL, {
+              method: "POST",
+              body: formData,
+              mode: "no-cors"
             })
             .then(() => {
-              feedbackElement.textContent = 'Bid is being processed and recorded.';
+              feedbackElement.textContent = "Bid submitted successfully!";
+              feedbackElement.style.color = "green";
             })
             .catch(error => {
-              feedbackElement.textContent = 'Bid processed but failed to record.';
-              feedbackElement.style.color = '#e74c3c';
-              console.error('Error adding bid:', error);
+              feedbackElement.textContent = "Failed to submit bid.";
+              feedbackElement.style.color = "#e74c3c";
+              console.error("Error submitting bid:", error);
             });
           } else {
             feedbackElement.textContent = 'Bid amount must be higher than the current price.';
@@ -2182,6 +2167,9 @@ function fetchProducts() {
 
           bidInput.value = '';
         });
+
+
+
 
         productCard.querySelector('.refresh-icon').addEventListener('click', function() {
           const refreshIcon = this;
