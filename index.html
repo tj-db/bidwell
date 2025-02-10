@@ -1,1 +1,2409 @@
-seemsgoodtome
+<!DOCTYPE html>
+<!-- Legal Footnote: This content is subject to copyright and should not be reproduced without permission. -->
+<!-- Written and created by Thomas John-Michael de Beer, feel free to contact me via tjdebeer@gmail.com  -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="manifest" href="manifest.json">
+  <title>BIDWELL</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="author" content="BIDWELL">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="description" content="Join BIDWELL online auctions.">
+  <meta name="keywords" content="auction, bidding, bids, sell, buy, BIDWELL">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    :root {
+      --text-color: #333;
+      --bg-color: #f4f4f4;
+      --brand-color: #59B757;
+    }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+main.container {
+    flex: 1;
+}
+
+.container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+    }
+
+.banner {
+            width: 100%;
+            object-fit: cover;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+.profile-image {
+        width: 66px;
+        height: 66px;
+        border-radius: 50%;
+        position: fixed;
+        top: 77px;
+        right: 22px;
+        z-index: 1003;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: 0.9s ease;
+}
+
+.profile-image:hover {
+        transform: scale(1.1);
+    }
+
+.fixed-profile-image {
+        top: auto;
+        bottom: 22px;
+        transition: 0.9s ease;
+}
+
+.favorite-count {
+        position: fixed;
+        top: 71px;
+        right: 18px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.9rem;
+        font-weight: bold;
+        z-index: 1004;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.favorite-count.red {
+        background-color: #e74c3c;
+        color: white;
+        font-size: 1.1rem;
+}
+
+.favorite-count.green {
+        background-color: var(--brand-color);
+        color: white;
+        font-size: 0.6rem;
+}
+
+.fixed-favorite-count {
+      top: auto;
+      bottom: 19px;
+}
+
+.product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      scroll-snap-type: y mandatory;
+    }
+
+.product-card {
+      position: relative;
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+.product-card .product-title-icon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-card .icons-container {
+    position: relative;
+}
+
+.product-card .favorite {
+    color: #f39c12;
+    cursor: pointer;
+    z-index: 1003;
+    opacity: 0.7;
+    transition: 0.3s ease;
+}
+
+.product-card .favorite:hover {
+      color: #e67e22;
+      transform: scale(1.1);
+      opacity: 1;
+}
+
+.product-card .product-title {
+      font-size: 1.2rem;
+      margin: 0;
+}
+
+.product-card .refresh-icon {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 10px;
+    color: #2980b9;
+    cursor: pointer;
+    z-index: 1003;
+    opacity: 0.9;
+    transition: 0.3s ease;
+}
+
+.product-card .refresh-icon:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.rotate {
+        animation: rotateIcon 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+@keyframes rotateIcon {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    opacity: 0.8;
+  }
+}
+
+.product-video-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; 
+    overflow: hidden;
+    background-color: black;
+}
+
+.product-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 102%;
+    width: 102%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+}
+
+.product-info {
+      padding: 15px;
+    }
+
+.product-description {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 10px;
+      margin-right: 33px;
+    }
+
+.product-price {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--brand-color);
+      margin-bottom: 10px;
+    }
+
+.bid-form {
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+.bid-input {
+      flex-grow: 1;
+      padding: 5px;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px 0 0 5px;
+    }
+
+.bid-button {
+      background-color: var(--brand-color);
+      color: white;
+      border: none;
+      padding: 5px 20px;
+      cursor: pointer;
+      border-radius: 0 5px 5px 0;
+      transition: background-color 0.3s ease;
+    }
+
+.bid-button:hover {
+      background-color: #2ecc71;
+    }
+
+.countdown {
+      font-size: 0.9rem;
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+footer {
+    padding: 0.95rem;
+    text-align: center;
+    background-color: #333;
+    color: white; 
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+footer i {
+    margin-top: 11px;
+    color: white;
+    font-size: 2.2rem;
+    margin-bottom: 4px;
+}
+
+#overlay2 {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: none;
+      z-index: 2000;
+    }
+
+#profileUpdateForm {
+    letter-spacing: 0.5px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    width: 80dvw;
+    max-width: 300px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-top-left-radius: 77px;
+    border-top-right-radius: 77px;
+    border-bottom-left-radius: 33px;
+    border-bottom-right-radius: 77px;
+    margin-top: 20px;
+    z-index: 2222;
+  }
+  
+#profileUpdateForm label {
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+#profileUpdateForm input[type="text"] {
+    letter-spacing: 0.6px;
+    width: calc(100% - 20px);
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+  
+#profileUpdateForm button {
+    letter-spacing: 1.1px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 14px;
+  }
+  
+#profileUpdateForm button:hover {
+    background-color: #0056b3;
+  }
+
+.profileUpdateprofile-image {
+      width: 111px;
+      height: 111px;
+      border-radius: 50%;
+      margin-bottom: 12px;
+    }
+
+.phone-number-container {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.phone-number-container span {
+    font-size: 14px;
+    margin-right: 10px;
+    line-height: 32px;
+}
+
+.phone-number-container input[type="text"] {
+    width: 100%;
+    margin-right: 20px;
+}
+
+
+#overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: none;
+      z-index: 2000;
+    }
+
+#AddProduct {
+      width: 66px;
+      height: 66px;
+      background-color: var(--brand-color);
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+      margin-top: 22px;
+      margin-bottom: 33px;
+      box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      font-size: 48px;
+      color: white;
+      font-weight: bold;
+      transition: 0.3s;
+      opacity: 1;
+    }
+
+#AddProduct:hover {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+
+#AddProduct i {
+      transition: transform 0.3s;
+    }
+
+#AddProduct:hover i {
+      transform: scale(1.1);
+    }
+
+#productForm {
+  letter-spacing: 0.5px;
+  position: fixed;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  width: 90vw;
+  max-width: 333px;
+  padding: 12px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 42px;
+  margin-top: 20px;
+  z-index: 2222;
+  text-align: center;
+}
+
+#productForm label {
+  display: block;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+#productForm input[type="text"],
+#productForm textarea,
+#productForm input[type="file"],
+#productForm input[type="url"],
+#productForm button {
+      width: calc(100% - 20px);
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 18px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+      text-align: center;
+}
+
+#productForm button {
+  letter-spacing: 1.1px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 18px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#productForm button:hover {
+  background-color: #0056b3;
+}
+
+#RefreshList {
+    position: relative;
+      width: 88px;
+      height: 88px;
+      background-color: transparent;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+      cursor: pointer;
+      font-size: 48px;
+      color: var(--brand-color);
+      font-weight: bold;
+      transition: 0.3s;
+      opacity: 1;
+    }
+
+#RefreshList:hover {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+
+#RefreshList i {
+      transition: transform 0.3s;
+    }
+
+#RefreshList:hover i {
+      animation: rotateIcon 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+      transform: scale(1.2);
+      animation-duration: 2s;
+      animation-iteration-count: 5;
+}
+
+.product-card2 {
+      position: relative;
+      background-color: var(--brand-color);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+.product-card2 .product-title-icon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-card2 .icons-container {
+    position: relative;
+}
+
+.product-card2 .favorite {
+    color: #FFFF00;
+    cursor: pointer;
+    z-index: 1003;
+    opacity: 0.7;
+    transition: 0.3s ease;
+}
+
+.product-card2 .favorite:hover {
+      color: #FFFF00;
+      transform: scale(1.1);
+      opacity: 1;
+}
+
+.product-card2 .product-title {
+  margin: 0;
+}
+
+.product-card2 .refresh-icon {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 10px;
+    color: #2980b9;
+    cursor: pointer;
+    z-index: 1003;
+    opacity: 0.9;
+    transition: 0.3s ease;
+}
+
+.product-card2 .refresh-icon:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.product-price2 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    }
+
+.product-description2 {
+      margin-right: 33px;
+      margin-bottom: 11px;
+      opacity: 0.9;
+    }
+
+.highest-bidder {
+      display: none;
+      font-size: 1.1rem;
+      color: white;
+      opacity: 0.8;
+    }
+
+.bidder-contact {
+      display: none;
+      font-size: 1.1rem;
+      color: white;
+      opacity: 0.8;
+      letter-spacing: 0.04em;
+    }
+                
+.bid-time {
+      font-size: 1.1rem;
+      color: white;
+      opacity: 0.8;
+      letter-spacing: 0.05em;
+    }
+
+.countdown2 {
+      font-size: 1.1rem;
+      color: white;
+      opacity: 0.5;
+    }
+
+  #search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 22px;
+    font-size: 16px;
+    outline: none;
+  }
+    
+.tag {
+    display: inline-block;
+    background-color: #e0e0e0;
+    border-radius: 16px;
+    padding: 2px 11px;
+    margin: 0px 5px 5px 0;
+    font-size: 14px;
+  }
+    
+.tag-close {
+    margin-left: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+    
+#tag-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+#productTagContainer {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+#productTags {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 22px;
+  font-size: 16px;
+  outline: none;
+}
+
+.lock-svg {
+    width: 44px;
+    height: 44px;
+    opacity: 0.9;
+    vertical-align: middle;
+    margin-bottom: 10px;
+}
+
+.lock-svg.visible {
+    display: inline;
+    animation: bounce 0.6s ease infinite;
+}
+
+.lock-svg.hidden {
+    display: none;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 3333;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.9);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%;
+  border-radius: 22px;
+}
+
+.close {
+  color: #aaa;
+  float: top;
+  font-size: 66px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#agreeTerms {
+  background-color:  var(--brand-color);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 2px 0;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background-color 0.3s ease;
+}
+
+#agreeTerms:hover {
+  background-color: #45a049;
+}
+
+#toggleTerms {
+  background-color: var(--brand-color);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 20px 0;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background-color 0.3s ease;
+}
+
+#toggleTerms:hover {
+  background-color: #45a049;
+}
+
+
+.product-delete-btn-container {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 33px;
+    height: 33px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    margin-top: 8px;
+}
+
+.delete-product-btn {
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0.7;
+}
+
+.delete-product-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    opacity: 0.9;
+}
+
+.delete-product-btn:before {
+    content: '✖';
+    font-size: 20px;
+    color: black;
+    line-height: 1;
+}
+
+  </style>
+</head>
+<body>
+<img id="banner" src="BIDWELL1.png" alt="BIDWELL Auctions" class="banner">
+
+<span class="favorite-count" style="cursor: pointer;" onclick="EditProfile()">
+  <i id="profileIcon" class="fas fa-check"></i>
+</span>
+
+  <main class="container" style="margin-top: 20px;">
+<div class="search-container">
+  <input type="text" id="search-input" placeholder="Search tags...">
+  <div id="tag-container"></div>
+  <div id="AddProduct" onclick="AddProduct()">
+    <i class="fas fa-plus"></i>
+  </div>
+</div>
+    </div>
+
+    <div class="product-grid" id="productGrid">
+
+    </div>
+  </div>
+
+
+    </div>
+  </main>
+<br>
+  <div id="RefreshList" onclick="RefreshList()">
+                <i class="fas fa-sync-alt refresh-icon"></i>
+  </div>
+<br><br>
+<footer>
+   <a href="mailto:tjdebeer@gmail.com">
+      <i class="fas fa-envelope"></i>
+   </a>
+<br>
+   BIDWELL © 2024. <br>
+   All Rights Reserved.
+<br>
+</footer>
+
+  <form id="profileForm">
+    <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+    <label for="profileImageInput" id="profileImageLabel" style="cursor: pointer;">
+       <img src="profile.jpg" alt="Current Profile Image" id="profileImage" class="profile-image">
+    </label>
+  </form>
+  <div id="uploadStatus"></div>
+
+
+  <div id="overlay2" onclick="CloseProfileForm()"></div>
+
+<form id="profileUpdateForm">
+    <img src="profile.jpg" alt="Current Profile Image" id="currentProfileImage" class="profileUpdateprofile-image">
+
+    <label for="nameInput">Name:</label>
+    <input type="text" id="nameInput" name="name" required><br><br>
+
+    <label for="phoneInput">Phone Number:</label>
+    <div class="phone-number-container">
+        <span id="countryCodeDisplay" data-country="South Africa" data-code="+27">+27</span>
+        <input type="text" id="phoneInput" name="phone" placeholder="Enter phone number" required>
+    </div><br><br>
+
+    <button type="button" id="deleteProfile">DELETE</button>
+    <button type="button" id="saveProfile">SAVE</button>
+</form>
+
+
+<div id="overlay" onclick="hideProductForm()"></div>
+
+<div id="productForm" style="display: none;">
+  <label for="productTitle">Product Title:</label>
+  <input type="text" id="productTitle" name="productTitle" required><br>
+
+  <label for="productDescription">Product Description:</label>
+  <input type="text" id="productDescription" name="productDescription" required><br>
+
+  <label for="startingPrice">Starting Price:</label>
+  <input type="text" id="startingPrice" name="startingPrice" required><br>
+
+  <label for="productTags">Product Tags:</label>
+  <input type="text" id="productTags" name="productTags" placeholder="Add a tag and press Enter" required>
+  <div id="productTagContainer"></div>
+
+  <label for="productVideo">Product Video URL:</label>
+  <input type="url" id="productVideo" name="productVideo" placeholder="Paste Streamable link here" required>
+  <br>
+  <a href="https://streamable.com/" target="_blank" style="display: inline-block; padding: 0px; border-radius: 22px; overflow: hidden; width: 60%; height: 44px;">
+    <img src="streamable.png" alt="Streamable" style="display: block; width: 100%; height: 100%; object-fit: cover;">
+  </a>
+  <br><br>
+  <button id="submitButton" type="submit">SUBMIT</button>
+</div>
+
+<div id="termsModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h2>Terms & Conditions</h2>
+    <p><strong>Welcome to BIDWELL.</strong></p>
+    <p>By using our services, you agree to the following Terms & Conditions.</p>
+
+    <button id="toggleTerms">Show Terms & Conditions</button>
+
+    <div id="termsContent" style="display:none;">
+    <h3>1. General Terms</h3>
+<br>
+    <p><strong>1.1 Service Description:</strong> BIDWELL provides a platform that connects sellers with potential buyers. Our role is strictly limited to facilitating this connection; we do not handle payments, manage transactions, or take responsibility for the final outcome of any sale.</p>
+<br>
+    <p><strong>1.2 User Agreement:</strong> By using our platform, you agree to these Terms and Conditions. If you do not agree, you must cease using our services immediately.</p>
+<br> 
+    <p><strong>1.3 Eligibility:</strong> To use our platform, users must comply with all applicable laws and regulations in their jurisdiction. By using our services, you confirm that you are legally allowed to participate in online auctions and interactions.</p>
+<br>
+    <h3>2. Role and Responsibilities</h3>
+<br>
+    <p><strong>2.1 No Guarantee of Outcome:</strong> BIDWELL makes no guarantees regarding the success of any auction, the behavior of any buyer or bidder, or the final price of any item. All sales are conducted between the buyer and bidder, and we are not liable for any disputes or unsatisfactory outcomes.</p>
+<br>
+    <p><strong>2.2 Anonymity:</strong> All transactions and communications on our platform remain anonymous until the auction concludes and the buyer and seller are connected. We do not disclose the identity of any user unless required by law.</p>
+<br>
+    <p><strong>2.3 Connection Fee:</strong> Users are charged a fee for using our platform to connect with bidders. This fee is non-refundable, regardless of the outcome of the auction.</p>
+<br>
+    <h3>3. User Obligations</h3>
+<br>
+    <p><strong>3.1 Accurate Information:</strong> Users are responsible for providing accurate and up-to-date information when using our platform.</p>
+<br>
+    <p><strong>3.2 Compliance with Laws:</strong> Users agree to comply with all applicable laws and regulations when using our services.</p>
+<br>
+    <p><strong>3.3 No Misuse of Platform:</strong> You agree not to misuse our platform by engaging in fraudulent activities, creating fake listings or bids, or violating any of these terms.</p>
+<br>
+    <h3>4. Disclaimers and Limitations of Liability</h3>
+<br>
+    <p><strong>4.1 No Warranties:</strong> BIDWELL provides its services "as is" without any warranties or guarantees. We do not endorse or verify any user, bidder, or buyer on our platform.</p>
+<br>
+    <p><strong>4.2 Limitation of Liability:</strong> To the maximum extent permitted by law, BIDWELL is not liable for any direct, indirect, incidental, or consequential damages arising from your use of the platform, including but not limited to loss of profits, data, or business opportunities.</p>
+<br>
+    <h3>5. Dispute Resolution</h3>
+<br>
+    <p><strong>5.1 Disputes Between Users:</strong> Any disputes arising between buyers and bidders are solely their responsibility. BIDWELL is not a party to any transaction and will not mediate disputes. However, we reserve the right to blacklist or suspend any user account that we deem abusive, harmful, or in violation of these Terms and Conditions. This includes, but is not limited to, situations where bidders fail to respond to the seller's communications or engage in placing false or misleading bids.</p>
+<br>
+    <p><strong>5.2 Governing Law:</strong> These Terms and Conditions are governed by the laws of South Africa. Any legal disputes will be resolved in the courts of South Africa.</p>
+<br>
+    <h3>6. Amendments</h3>
+<br>
+    <p>BIDWELL reserves the right to amend these Terms and Conditions at any time. Users will be notified of any significant changes on our website. Continued use of the platform constitutes acceptance of the revised terms.</p>
+<br>
+    <h3>7. Intellectual Property</h3>
+<br>
+    <p><strong>7.1 Ownership:</strong> All content, systems, branding, logos, and materials provided by BIDWELL on the platform are protected by intellectual property laws and remain the exclusive property of BIDWELL.</p>
+<br>
+    <p><strong>7.2 User-Generated Content:</strong> By submitting any content (such as listings, descriptions, images, etc.) to the platform, users grant BIDWELL a non-exclusive, royalty-free, worldwide license to use, modify, and display such content as necessary for the operation of the platform.</p>
+<br>
+    <h3>8. Privacy and Data Protection</h3>
+<br>
+    <p><strong>8.1 Data Collection:</strong> BIDWELL collects and processes certain personal data to facilitate the services provided. This includes contact information and usage data. We are committed to protecting your privacy in accordance with applicable data protection laws.</p>
+<br>
+    <p><strong>8.2 Use of Data:</strong> User data will be used only for the purposes of providing and improving the platform and will not be sold or shared with third parties, except as required by law.</p>
+<br>
+    <p><strong>8.3 Data Security:</strong> While we implement reasonable security measures, BIDWELL cannot guarantee the absolute security of user data. By using our platform, you acknowledge the inherent risks involved in transmitting information over the internet.</p>
+<br>
+    <h3>9. Account Suspension and Termination</h3>
+<br>
+    <p><strong>9.1 Grounds for Suspension:</strong> BIDWELL reserves the right to suspend, terminate or blacklist user accounts if we believe they are in violation of these Terms and Conditions or engaging in illegal activities.</p>
+<br>
+    <p><strong>9.2 Termination by User:</strong> Users may terminate their account at any time by contacting customer support. Upon termination, all associated data may be deleted or retained as required by law.</p>
+<br>
+    <h3>10. Third-Party Services and Links</h3>
+<br>
+    <p><strong>10.1 Third-Party Services:</strong> Our platform may contain links to third-party websites or services that are not owned or controlled by BIDWELL. We are not responsible for the content, policies, or practices of these third parties.</p>
+<br>
+    <p><strong>10.2 No Endorsement:</strong> The inclusion of third-party links on our platform does not imply endorsement or sponsorship by BIDWELL.</p>
+<br>
+    <h3>11. Indemnification</h3>
+<br>
+    <p><strong>11.1 User Indemnity:</strong> Users agree to indemnify and hold harmless BIDWELL, its employees, officers, and agents from any claims, damages, losses, or expenses arising out of their use of the platform or violation of these Terms and Conditions.</p>
+<br>
+    <h3>12. Contact Information</h3>
+<br>
+    <p>For any questions or concerns regarding these Terms and Conditions, please contact us at tjdebeer@gmail.com.</p>
+<br>
+    </div>
+<br>
+    <button id="agreeTerms">I Accept the Terms & Conditions</button>
+  </div>
+</div>
+
+
+
+
+
+  <script>
+
+window.onload = async function() {
+            const contactId = localStorage.getItem('CONTACT_ID');
+
+            // const currentUrl = window.location.href;
+            // const targetUrl = 'https://framellarchive.github.io/BIDWELL/';
+            // if (currentUrl !== targetUrl) {
+            //     window.location.href = 'https://www.google.com';
+            //     return;
+            // }
+
+            if (contactId) {
+                const repoUrl = `https://api.github.com/repos/llllDB/l/contents/`;
+
+                try {
+                    const response = await fetch(repoUrl, { credentials: 'omit' });
+
+                    if (response.ok) {
+                        const files = await response.json();
+                        const fileExists = files.some(file => file.name === contactId);
+
+                        if (fileExists) {
+                            window.location.href = 'https://www.google.com';
+                        }
+                    } else {
+                    }
+                } catch (error) {
+                    console.error('Network error occurred:', error);
+                }
+            }
+        };
+
+const productTagsInput = document.getElementById('productTags');
+const productTagContainer = document.getElementById('productTagContainer');
+let productTags = [];
+
+productTagsInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+        if (this.value.trim() !== '') {
+            addProductTag(this.value.trim());
+            this.value = '';
+            e.preventDefault();
+        }
+    }
+});
+
+productTagsInput.addEventListener('blur', function() {
+    if (this.value.trim() !== '') {
+        addProductTag(this.value.trim());
+        this.value = '';
+    }
+});
+
+function formatTag(tagText) {
+    return tagText.trim().toLowerCase().replace(/\s+/g, '%20');
+}
+
+function addProductTag(tagText) {
+  if (!productTags.includes(tagText)) {
+    productTags.push(tagText);
+    renderProductTags();
+  }
+}
+
+function removeProductTag(tagText) {
+  productTags = productTags.filter(tag => tag !== tagText);
+  renderProductTags();
+}
+
+function renderProductTags() {
+  productTagContainer.innerHTML = '';
+  productTags.forEach(tag => {
+    const tagElement = document.createElement('span');
+    tagElement.classList.add('tag');
+    tagElement.innerHTML = `
+      ${tag}
+      <span class="tag-close" onclick="removeProductTag('${tag}')">&times;</span>
+    `;
+    productTagContainer.appendChild(tagElement);
+  });
+}
+
+const llllBLACKDB = 'llllDB/l';
+const llllDB = 'lllllDB/l';
+const llllPDB = 'EDGEHILLGREENS/l';
+const merpmerp = 'Z2hwX2Q0Q';
+const gloopdoop = 'zdSSVFhSzNZ';
+const dloogdloog = 'MXNhUnlxSzIz';
+const herpherp = gloopdoop + dloogdloog;
+const derpderp = 'UEg3clN0Q2hkeDNsSGIwSw==';
+const joojooo = merpmerp + herpherp + derpderp;
+const moo = atob(joojooo);
+const derpderp2 = 'fJUmBEWVYuCEC0Ub0H9';
+const joojooo2 = 'ghp_BuSjlpYUO8TnKx42b';
+const moo2 = joojooo2 + derpderp2;
+const derpderp3 = 'ghp_SRSD21Osos5Eo';
+const joojooo3 = 'Mf6GOzCl8IsZK5GJI22HlgF';
+const moo3 = joojooo3 + derpderp3;
+
+document.getElementById('submitButton').addEventListener('click', function(event) {
+    event.preventDefault();
+
+    const productTitle = document.getElementById('productTitle').value;
+    const productDescription = document.getElementById('productDescription').value;
+    const startingPriceInput = String(document.getElementById('startingPrice').value).trim();
+    const productVideoUrl = document.getElementById('productVideo').value;
+    const specialCharRegex = /[!@#$%^&*()?":{}|<>]/g;
+
+    function containsSpecialCharacters(str) {
+        return specialCharRegex.test(str);
+    }
+
+    const sanitizedStartingPrice = startingPriceInput.replace(/[^0-9.]/g, '');
+    const startingPrice = parseFloat(sanitizedStartingPrice);
+
+    if (productTitle && productDescription && !isNaN(startingPrice) && productVideoUrl) {
+        if (containsSpecialCharacters(productTitle) || containsSpecialCharacters(productDescription)) {
+            alert('Special characters are not allowed.');
+            return;
+        }
+
+        try {
+            new URL(productVideoUrl);
+        } catch (_) {
+            alert('Please enter a valid URL.');
+            return;
+        }
+
+        const currentTimestamp = getUTCTimestamp().substring(0, 12);
+        const expiryTimestamp = addHoursToTimestamp(currentTimestamp, 48);
+
+        const seller = localStorage.getItem('OWNER_ID');
+        const productTag = encodeURIComponent(`${expiryTimestamp}${productTitle}`);
+        const formattedTags = [formatTag(productTitle), formatTag(productTag), ...productTags.map(formatTag)];
+
+        const productData = {
+            ProductID: `${expiryTimestamp}${productTitle}`,
+            ProductTitle: productTitle,
+            ProductDescription: productDescription,
+            ProductVideo: productVideoUrl,
+            StartingAmount: startingPrice,
+            Seller: seller,
+            Expiry: expiryTimestamp,
+            Tags: formattedTags
+        };
+
+        createFile(llllPDB, productData, moo)
+        .then(() => {
+            console.log('Product added successfully');
+            hideProductForm();
+            getListings();
+        })
+        .catch(error => {
+            console.error('Error adding product to GitHub:', error);
+            alert('Upload to GitHub failed: ' + error.message);
+        });
+
+    } else {
+        alert('Please fill in all fields and provide a video URL.');
+    }
+});
+
+function addHoursToTimestamp(timestamp, hoursToAdd) {
+    const year = parseInt(timestamp.substring(0, 4), 10);
+    const month = parseInt(timestamp.substring(4, 6), 10) - 1;
+    const day = parseInt(timestamp.substring(6, 8), 10);
+    const hour = parseInt(timestamp.substring(8, 10), 10);
+    const minute = parseInt(timestamp.substring(10, 12), 10);
+    const date = new Date(year, month, day, hour, minute);
+    date.setHours(date.getHours() + hoursToAdd);
+    const newYear = date.getFullYear();
+    const newMonth = String(date.getMonth() + 1).padStart(2, '0');
+    const newDay = String(date.getDate()).padStart(2, '0');
+    const newHour = String(date.getHours()).padStart(2, '0');
+    const newMinute = String(date.getMinutes()).padStart(2, '0');
+    
+    return `${newYear}${newMonth}${newDay}${newHour}${newMinute}`;
+}
+
+function RefreshList() {
+    getListings();
+    fetchProducts();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function hideProductForm() {
+  overlay.style.display = 'none';
+  productForm.style.display = 'none';
+}
+
+async function AddProduct() {
+  const ownerId = localStorage.getItem('OWNER_ID');
+  
+  if (!ownerId) {
+    EditProfile();
+    alert("PLEASE REGISTER ACCOUNT");
+    return;
+  }
+
+  const overlay = document.getElementById('overlay');
+  const productForm = document.getElementById('productForm');
+  overlay.style.display = 'block';
+  productForm.style.display = 'block';
+
+  if (banners.length > 0) {
+    const currentTags = banners[currentIndex].tags;
+    currentTags.forEach(tag => addProductTag(tag));
+  }
+
+}
+
+function getListings() {
+    const ownerId = localStorage.getItem('OWNER_ID');
+    const apiUrl = `https://api.github.com/repos/${llllPDB}/contents`;
+
+    fetch(apiUrl)
+        .then(response => {
+            if (response.status === 403) {
+                throw new Error('403: Forbidden - API rate limit exceeded or access denied.');
+            }
+            return response.json();
+        })
+        .then(files => {
+            if (!Array.isArray(files)) {
+                throw new TypeError('Expected an array of files, but got something else.');
+            }
+
+            const productFiles = files.filter(file => file.name.endsWith('.json'));
+
+            const fetchProductPromises = productFiles.map(file =>
+                fetch(file.download_url).then(response => response.json())
+            );
+
+            return Promise.all(fetchProductPromises);
+        })
+        .then(products => {
+            const filteredProducts = products.filter(product => product.Seller === ownerId);
+
+            if (!filteredProducts || filteredProducts.length === 0) {
+                console.log('You have no products currently listed.');
+                return;
+            }
+
+            const productGrid = document.getElementById('productGrid');
+            const productIDs = [];
+
+            productGrid.innerHTML = '';
+
+            filteredProducts.forEach(product => {
+                const productCard2 = document.createElement('div');
+                productCard2.classList.add('product-card2');
+
+                const videoUrl = product.ProductVideo;
+                const updatedVideoUrl = videoUrl.replace('https://streamable.com/', 'https://streamable.com/e/');
+                const productID1 = product.ProductID;
+                const productTitle = product.ProductTitle;
+                const productDescription = product.ProductDescription;
+                const currentPrice = parseFloat(product.StartingAmount);
+                const expiryDateString = product.Expiry;
+                const year = parseInt(expiryDateString.substring(0, 4));
+                const month = parseInt(expiryDateString.substring(4, 6)) - 1;
+                const day = parseInt(expiryDateString.substring(6, 8));
+                const hour = parseInt(expiryDateString.substring(8, 10));
+                const minute = parseInt(expiryDateString.substring(10, 12));
+                const expiryDate = new Date(year, month, day, hour, minute);
+
+                productIDs.push(productID1);
+
+                productCard2.innerHTML = `
+                        <div class="product-delete-btn-container">
+                            <button class="delete-product-btn"></button>
+                       </div>
+                    <div class="product-video-container">
+                        <iframe class="product-video" src="${updatedVideoUrl}" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title-icon">
+                            <h2 class="product-title">${productTitle}</h2>
+                            <div class="icons-container">
+                                <span class="favorite">
+                                    <i class="fa fa-star"></i>
+                                </span>
+                                <i class="fas fa-sync-alt refresh-icon"></i>
+                            </div>
+                        </div>
+                        <p class="product-description2">${productDescription}</p>
+                        <p class="product-price2" data-current-price="${currentPrice}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="lock-svg" style="vertical-align: middle;">
+                                <path fill="#FFFFFF" d="M389.2,245.9H178.8v-89.4c0-42.5,34.5-77,77-77s77,34.5,77,77v23c0,11.7,9.5,21.2,21.2,21.2
+                                c11.7,0,21.2-9.5,21.2-21.2v-23C375.4,90.6,321.7,37,255.8,37S136.3,90.6,136.3,156.5v89.4h-13.9c-8.5,0-15.3,6.9-15.3,15.3V459
+                                c0,8.5,6.9,15.3,15.3,15.3h266.8c8.5,0,15.3-6.9,15.3-15.3V261.2C404.6,252.8,397.7,245.9,389.2,245.9z"/>
+                            </svg>
+                            Current Price: R${currentPrice}
+                        </p>
+                        <p class="highest-bidder"></p>
+                        <p class="bidder-contact"></p>
+                        <p class="bid-time"></p>
+                        <p class="countdown2"></p>
+                        <p class="product-id" style="display: none;">${productID1}</p>
+                    </div>
+                `;
+
+                productGrid.appendChild(productCard2);
+
+                const countdownElement2 = productCard2.querySelector('.countdown2');
+                updateCountdown2(expiryDate, countdownElement2, productCard2, productID1);
+
+                productCard2.querySelector('.delete-product-btn').addEventListener('click', function() {
+                    const confirmed = confirm('Are you sure you want to delete this product? This action cannot be undone.');
+
+                    if (confirmed) {
+                        const fileName = `${productID1}.json`;
+                        deleteFile(llllPDB, fileName, moo); 
+                        productCard2.remove();
+                    }
+                });
+
+                productCard2.querySelector('.refresh-icon').addEventListener('click', function() {
+                    const refreshIcon = this;
+                    refreshIcon.classList.add('rotate');
+                    setTimeout(() => {
+                        refreshIcon.classList.remove('rotate');
+                    }, 4444);
+                    refreshPrice2(productIDs);
+
+            intervalId = setInterval(() => {
+                refreshPrice2(productIDs);
+            }, 120000);
+
+                });
+
+                productCard2.querySelector('.favorite').addEventListener('click', function() {
+                    const productURL = `${window.location.origin}/BIDWELL/#${productID1}`;
+                    navigator.clipboard.writeText(productURL).then(() => {
+                        alert('Link saved to clipboard');
+                    }).catch(err => {
+                        console.error('Failed to copy product URL to clipboard:', err);
+                    });
+                });
+            });
+
+            refreshPrice2(productIDs);
+        })
+        .catch(error => {
+            console.error('Error fetching products:', error);
+
+            if (error.message.includes('403')) {
+                alert('Excessive traffic. Please try again in 1 hour.');
+            } else if (error.message.includes('TypeError')) {
+                alert('Unexpected data format received. Please contact support if this issue persists.');
+            } else {
+                alert('An error occurred. Please try again later.');
+            }
+        });
+}
+
+document.addEventListener('DOMContentLoaded', getListings);
+
+function updateCountdown2(expiryDate, countdownElement, productCard2, productID1) {
+
+    const expiryDateUTC = new Date(expiryDate).getTime();
+    let remainingSeconds = Math.floor((expiryDateUTC - Date.now()) / 1000);
+    let intervalId;
+
+    function update() {
+        if (remainingSeconds > 0) {
+            const days = Math.floor(remainingSeconds / (60 * 60 * 24));
+            const hours = Math.floor((remainingSeconds % (60 * 60 * 24)) / (60 * 60));
+            const minutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
+            const seconds = remainingSeconds % 60;
+
+            countdownElement.textContent = `Auction ends: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            const lockIcon = productCard2.querySelector('.lock-svg');
+            if (lockIcon) {
+                lockIcon.classList.remove('visible');
+                lockIcon.classList.add('hidden');
+            }
+
+            remainingSeconds--;
+        } else {
+            const twoWeeksInDays = 14;
+            const daysSinceExpiry = Math.floor((Date.now() - expiryDateUTC) / (1000 * 60 * 60 * 24));
+
+            if (daysSinceExpiry <= twoWeeksInDays) {
+                const daysUntilAutoDelete = twoWeeksInDays - daysSinceExpiry;
+                countdownElement.textContent = `${daysUntilAutoDelete} days left`;
+
+                const lockIcon = productCard2.querySelector('.lock-svg');
+                if (lockIcon) {
+                    lockIcon.classList.remove('hidden');
+                    lockIcon.classList.add('visible');
+                }
+
+                const priceElement = productCard2.querySelector('.product-price2');
+                if (priceElement) {
+                    priceElement.style.cursor = 'pointer';
+                    priceElement.addEventListener('click', function() {
+                        unlockDetails(priceElement.getAttribute('data-current-price'), productCard2.querySelector('.product-id').textContent);
+                    });
+                }
+
+                const videoContainer = productCard2.querySelector('.product-video-container');
+                if (videoContainer) {
+                    videoContainer.remove();
+                    const productInfo = productCard2.querySelector('.product-info');
+                    if (productInfo) {
+                        productInfo.style.marginTop = '44px';
+                    }
+                }
+
+                const refreshIcon = productCard2.querySelector('.refresh-icon');
+                if (refreshIcon) {
+                    refreshIcon.style.display = 'none';
+                }
+                const favoriteIcon = productCard2.querySelector('.favorite');
+                if (favoriteIcon) {
+                    favoriteIcon.style.display = 'none';
+                }
+
+                checkPaymentStatus(productID1, productCard2);
+            } else {
+                productCard2.remove();
+            }
+            clearInterval(intervalId);
+        }
+    }
+    update();
+    intervalId = setInterval(update, 1000);
+}
+
+function deleteFile(llllPDB, fileName, moo) {
+    const apiUrl = `https://api.github.com/repos/${llllPDB}/contents/${fileName}`;
+
+    fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `token ${moo}`,
+            'Accept': 'application/vnd.github.v3+json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch file details.');
+        }
+        return response.json();
+    })
+    .then(fileData => {
+        const sha = fileData.sha;
+
+        return fetch(apiUrl, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `token ${moo}`,
+                'Accept': 'application/vnd.github.v3+json'
+            },
+            body: JSON.stringify({
+                message: `Deleting file ${fileName}`,
+                sha: sha
+            })
+        });
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to delete the file.');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log(` successfully deleted.`);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to delete the product. Please try again later.');
+    });
+}
+
+function convertToNumericID(nonNumericID) {
+    
+    const first12Digits = nonNumericID.slice(0, 12);
+    const remainingPart = nonNumericID.slice(12);
+
+    function hashCode(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = (hash << 5) - hash + char;
+            hash = hash & hash;
+        }
+        return hash;
+    }
+
+    const hashedPart = Math.abs(hashCode(remainingPart)) % 1000000000; 
+    const numericID = first12Digits + String(hashedPart).padStart(9, '0');
+    return numericID;
+}
+
+function checkPaymentStatus(paymentID, productCard2) {
+    const snap1 = '7136101f';
+    const snap2 = '-cafd-4db8';
+    const snap3 = '-bd4a-74a2';
+    const snap4 = '94b7b434';
+    const snap5 = ':';
+
+    const snapsnapsnapsnap = snap1 + snap2 + snap3 + snap4 + snap5;
+
+    let numericPaymentID = paymentID;
+    if (isNaN(paymentID)) {
+        numericPaymentID = convertToNumericID(paymentID);
+    }
+
+    const url = `https://pos.snapscan.io/merchant/api/v1/payments?merchantReference=${numericPaymentID}`;
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Basic ' + btoa(snapsnapsnapsnap),
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log(`Response received for Merchant Reference: ${numericPaymentID}`);
+            return response.json();
+        } else if (response.status === 404) {
+            console.log(`Merchant Reference ${numericPaymentID} not found.`);
+            return Promise.reject('Merchant Reference not found');
+        } else {
+            console.log(`Unexpected error occurred for Merchant Reference: ${numericPaymentID}`);
+            return Promise.reject('An unexpected error occurred');
+        }
+    })
+    .then(results => {
+        const payments = results.filter(payment => payment.merchantReference === numericPaymentID); 
+
+        if (payments.length === 0) {
+            console.log(`No payments found for Merchant Reference ${numericPaymentID}.`);
+
+//temp
+            const lockIcon = productCard2.querySelector('.lock-svg');
+            const highestBidder = productCard2.querySelector('.highest-bidder');
+            const bidderContact = productCard2.querySelector('.bidder-contact');
+
+                if (lockIcon) {
+                    lockIcon.classList.remove('visible');
+                    lockIcon.classList.add('hidden');
+                }
+                if (highestBidder) {
+                    highestBidder.style.display = 'block';
+                }
+                if (bidderContact) {
+                    bidderContact.style.display = 'block';
+                }
+//temp
+
+            return;
+        }
+
+        payments.forEach(payment => {
+            console.log(`Payment result for Merchant Reference ${numericPaymentID}:`, payment);
+
+            const lockIcon = productCard2.querySelector('.lock-svg');
+            const highestBidder = productCard2.querySelector('.highest-bidder');
+            const bidderContact = productCard2.querySelector('.bidder-contact');
+
+            if (payment.status === 'completed') {
+                console.log(`Payment for Merchant Reference ${numericPaymentID} is completed.`);
+                if (lockIcon) {
+                    lockIcon.classList.remove('visible');
+                    lockIcon.classList.add('hidden');
+                }
+                if (highestBidder) {
+                    highestBidder.style.display = 'block';
+                }
+                if (bidderContact) {
+                    bidderContact.style.display = 'block';
+                }
+            } else {
+                console.log(`Payment for Merchant Reference ${numericPaymentID} is not completed.`);
+                if (lockIcon) {
+                    lockIcon.classList.remove('hidden');
+                    lockIcon.classList.add('visible');
+                }
+                if (highestBidder) {
+                    highestBidder.style.display = 'none';
+                }
+                if (bidderContact) {
+                    bidderContact.style.display = 'none';
+                }
+            }
+        });
+    })
+    .catch(error => {
+        console.error(`Error checking payment status for Merchant Reference ${numericPaymentID}:`, error);
+        const lockIcon = productCard2.querySelector('.lock-svg');
+        const highestBidder = productCard2.querySelector('.highest-bidder');
+        const bidderContact = productCard2.querySelector('.bidder-contact');
+        if (lockIcon) {
+            lockIcon.classList.remove('hidden');
+            lockIcon.classList.add('visible');
+        }
+        if (highestBidder) {
+            highestBidder.style.display = 'none';
+        }
+        if (bidderContact) {
+            bidderContact.style.display = 'none';
+        }
+    });
+}
+
+function unlockDetails(currentPrice, productID1) {
+    const COMMISSION = currentPrice * 1;
+
+console.log("Initial productID1:", productID1);
+
+    let numericProductID = productID1;
+    if (isNaN(productID1)) {
+        numericProductID = convertToNumericID(productID1);
+    }
+    
+console.log("Final numericProductID:", numericProductID);
+
+    const url = `https://pos.snapscan.io/qr/w1hRjQUu?amount=${COMMISSION}&id=${numericProductID}`;
+
+    console.log(url);
+    //window.open(url, '_blank');
+}
+
+function getUTCTimestamp() {
+  const now = new Date();
+  const year = now.getUTCFullYear();
+  const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(now.getUTCDate()).padStart(2, '0');
+  const hours = String(now.getUTCHours()).padStart(2, '0');
+  const minutes = String(now.getUTCMinutes()).padStart(2, '0');
+  const seconds = String(now.getUTCSeconds()).padStart(2, '0');
+  const formattedTimestamp = `${year}${month}${day}${hours}${minutes}${seconds}`;
+  return formattedTimestamp;
+}
+
+function refreshPrice2(productIDs) {
+    const apiUrl = `https://api.github.com/repos/${llllDB}/contents`;
+
+    fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(files => {
+            if (!Array.isArray(files)) {
+                throw new TypeError('Expected an array of files');
+            }
+
+            const bidFiles = files.filter(file =>
+                productIDs.some(id => file.name.startsWith(id) && file.name.endsWith('.json'))
+            );
+
+            const fetchBidPromises = bidFiles.map(file =>
+                fetch(file.download_url).then(response => response.json())
+            );
+
+            return Promise.all(fetchBidPromises);
+        })
+        .then(bids => {
+            productIDs.forEach(productID => {
+                const productCard = Array.from(document.querySelectorAll('.product-card2'))
+                    .find(card => card.querySelector('.product-id').textContent === productID);
+
+                if (productCard) {
+                    let highestBid = 0;
+                    let highestBidder = '';
+                    let contactDetails = 'N/A';
+                    let bidTime = 'N/A';
+
+                    bids.forEach(bid => {
+                        if (bid.productID === productID) {
+                            const bidAmount = parseFloat(bid.amount);
+                            if (bidAmount > highestBid) {
+                                highestBid = bidAmount;
+                                highestBidder = bid.buyer ? bid.buyer.substring(14) : 'N/A';
+                                contactDetails = bid.contactDetails || 'N/A';
+                                bidTime = bid.timeStamp || 'N/A';
+                            }
+                        }
+                    });
+
+                    const priceElement = productCard.querySelector('.product-price2');
+                    if (highestBid > 0) {
+                        priceElement.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="lock-svg">
+                                <path fill="#FFFFFF" d="M389.2,245.9H178.8v-89.4c0-42.5,34.5-77,77-77s77,34.5,77,77v23c0,11.7,9.5,21.2,21.2,21.2
+                                c11.7,0,21.2-9.5,21.2-21.2v-23C375.4,90.6,321.7,37,255.8,37S136.3,90.6,136.3,156.5v89.4h-13.9c-8.5,0-15.3,6.9-15.3,15.3V459
+                                c0,8.5,6.9,15.3,15.3,15.3h266.8c8.5,0,15.3-6.9,15.3-15.3V261.2C404.6,252.8,397.7,245.9,389.2,245.9z"/>
+                            </svg>
+                            Current Price: R${highestBid}
+                        `;
+                        priceElement.setAttribute('data-current-price', highestBid);
+                    } else {
+                        priceElement.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="lock-svg hidden">
+                                <path fill="#FFFFFF" d="M389.2,245.9H178.8v-89.4c0-42.5,34.5-77,77-77s77,34.5,77,77v23c0,11.7,9.5,21.2,21.2,21.2
+                                c11.7,0,21.2-9.5,21.2-21.2v-23C375.4,90.6,321.7,37,255.8,37S136.3,90.6,136.3,156.5v89.4h-13.9c-8.5,0-15.3,6.9-15.3,15.3V459
+                                c0,8.5,6.9,15.3,15.3,15.3h266.8c8.5,0,15.3-6.9,15.3-15.3V261.2C404.6,252.8,397.7,245.9,389.2,245.9z"/>
+                            </svg>
+                            No bids yet
+                        `;
+                        priceElement.setAttribute('data-current-price', '0');
+                    }
+
+                    const highestBidderElement = productCard.querySelector('.highest-bidder');
+                    highestBidderElement.textContent = highestBidder === 'N/A' ? '' : `Highest Bidder: ${highestBidder}`;
+
+                    const contactDetailsElement = productCard.querySelector('.bidder-contact');
+                    contactDetailsElement.textContent = contactDetails === 'N/A' ? '' : `no. ${formatContactNumber(contactDetails)}`;
+
+                    const bidTimeElement = productCard.querySelector('.bid-time');
+                    bidTimeElement.textContent = bidTime === 'N/A' ? '' : `${formatTimestamp(bidTime)}`;
+                } else {
+                    console.log('Product card not found for ID:', productID);
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching bids for refresh:', error);
+        });
+}
+
+function formatContactNumber(number) {
+  const phoneNumberMatch = number.match(/(\d{10})$/);
+  if (!phoneNumberMatch) {
+    return number;
+  }
+  const phoneNumber = phoneNumberMatch[1];
+  const formattedPhoneNumber = phoneNumber.replace(/^(\d{3})(\d{3})(\d{4})$/, '$1 $2 $3');
+  const formattedNumber = number.replace(/(\d{10})$/, formattedPhoneNumber);
+  return formattedNumber;
+}
+
+function formatTimestamp(timestamp) {
+    const year = timestamp.substring(0, 4);
+    const month = timestamp.substring(4, 6);
+    const day = timestamp.substring(6, 8);
+    const hour = timestamp.substring(8, 10);
+    const minute = timestamp.substring(10, 12);
+    const second = timestamp.substring(12, 14);
+
+    return `${year}/${month}/${day} ${hour}:${minute}:${second}`;
+}
+
+function updateProfileIcon() {
+  const ownerId = localStorage.getItem('OWNER_ID');
+  const profileIcon = document.getElementById('profileIcon');
+  const iconContainer = profileIcon.parentElement;
+
+  if (!ownerId) {
+    profileIcon.classList.remove('fas', 'fa-check');
+    profileIcon.textContent = '!';
+    iconContainer.classList.remove('green');
+    iconContainer.classList.add('red');
+  } else {
+    profileIcon.classList.add('fas', 'fa-check');
+    profileIcon.textContent = '';
+    iconContainer.classList.remove('red');
+    iconContainer.classList.add('green');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  updateProfileIcon();
+});
+
+
+function CloseProfileForm() {
+      const form = document.getElementById('profileUpdateForm');
+      const overlay2 = document.getElementById('overlay2');
+      form.style.display = 'none';
+      overlay2.style.display = 'none';
+    }
+
+document.addEventListener('DOMContentLoaded', function() {
+  const ownerId = localStorage.getItem('OWNER_ID');
+  const contactId = localStorage.getItem('CONTACT_ID');
+  
+  if (ownerId) {
+    const timestampLength = 14;
+    const nameWithoutTimestamp = ownerId.slice(timestampLength);
+    document.getElementById('nameInput').value = nameWithoutTimestamp;
+    }
+  
+  if (contactId) {
+    document.getElementById('phoneInput').value = contactId;
+  }
+});
+
+document.getElementById('saveProfile').addEventListener('click', function() {
+  const name = document.getElementById('nameInput').value;
+  let phone = document.getElementById('phoneInput').value;
+  const countrycode = document.getElementById('countryCodeDisplay').textContent;
+
+  phone = phone.replace(/\s+/g, '');
+
+  if (!/^[a-zA-Z\s]+$/.test(name)) {
+    alert('Please enter a name without special characters');
+    return;
+  }
+
+  if (!phone.match(/^\d{10}$/)) {
+    alert('Please enter a valid 10-digit phone number.');
+    return;
+  }
+
+  document.getElementById('termsModal').style.display = 'block';
+});
+
+document.getElementById('toggleTerms').addEventListener('click', function() {
+  const termsContent = document.getElementById('termsContent');
+  const toggleButton = document.getElementById('toggleTerms');
+  
+  if (termsContent.style.display === 'none') {
+    termsContent.style.display = 'block';
+    toggleButton.textContent = 'Hide Terms & Conditions';
+  } else {
+    termsContent.style.display = 'none';
+    toggleButton.textContent = 'Show Terms & Conditions';
+  }
+});
+
+document.getElementById('agreeTerms').addEventListener('click', function() {
+  const name = document.getElementById('nameInput').value;
+  let phone = document.getElementById('phoneInput').value;
+  const countrycode = "+27";
+
+  phone = phone.replace(/\s+/g, '');
+
+  const timestamp = getUTCTimestamp();
+  const newTimestampedName = `${timestamp}${name}`;
+
+  const existingOwnerId = localStorage.getItem('OWNER_ID');
+
+  if (!existingOwnerId || existingOwnerId.substring(14) !== name) {
+    localStorage.setItem('OWNER_ID', newTimestampedName);
+  }
+
+  localStorage.setItem('CONTACT_ID', phone);
+  localStorage.setItem('COUNTRY_CODE', countrycode);
+  updateProfileIcon();
+  CloseProfileForm();
+
+  document.getElementById('termsModal').style.display = 'none';
+});
+
+document.getElementById('closeModal').addEventListener('click', function() {
+  document.getElementById('termsModal').style.display = 'none';
+});
+
+
+document.getElementById('deleteProfile').addEventListener('click', function() {
+  localStorage.removeItem('OWNER_ID');
+  localStorage.removeItem('CONTACT_ID');
+  localStorage.removeItem('COUNTRY_CODE');
+  resetFormInputs();
+  updateProfileIcon()
+  alert('Profile information deleted.');
+  CloseProfileForm();
+});
+
+function resetFormInputs() {
+  const form = document.getElementById('profileUpdateForm');
+  const nameInput = document.getElementById('nameInput');
+  const phoneInput = document.getElementById('phoneInput');
+  nameInput.value = '';
+  phoneInput.value = '';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const profileImageInput = document.getElementById('profileImageInput');
+  const profileImage = document.getElementById('profileImage');
+  const uploadStatus = document.getElementById('uploadStatus');
+  const savedProfileImage = localStorage.getItem('profileImage');
+  const saveProfileButton = document.getElementById('saveProfile');
+
+  if (savedProfileImage) {
+    profileImage.src = savedProfileImage;
+  }
+
+  let imgElement = null;
+  let canvas = null;
+  let ctx = null;
+
+  profileImageInput.addEventListener('change', function() {
+    const file = profileImageInput.files[0];
+    if (!file) {
+      EditProfile();
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const newImageSrc = e.target.result;
+      profileImage.src = newImageSrc;
+
+      imgElement = new Image();
+      imgElement.src = newImageSrc;
+      imgElement.onload = function() {
+        canvas = document.createElement('canvas');
+        ctx = canvas.getContext('2d');
+
+        const squareSize = Math.min(imgElement.width, imgElement.height);
+        canvas.width = squareSize;
+        canvas.height = squareSize;
+
+        const startX = (imgElement.width - squareSize) / 2; 
+        const startY = (imgElement.height - squareSize) / 2; 
+        ctx.drawImage(imgElement, startX, startY, squareSize, squareSize, 0, 0, squareSize, squareSize);
+
+        const croppedImageSrc = canvas.toDataURL();
+        profileImage.src = croppedImageSrc;
+        localStorage.setItem('profileImage', croppedImageSrc);
+
+        EditProfile();
+      };
+    };
+    reader.readAsDataURL(file);
+  });
+
+  saveProfileButton.addEventListener('click', function() {
+    if (canvas) {
+      const croppedImageSrc = canvas.toDataURL(); 
+      localStorage.setItem('profileImage', croppedImageSrc);
+      EditProfile();
+    }
+  });
+});
+
+function EditProfile() {
+  const form = document.getElementById('profileUpdateForm');
+  const overlay2 = document.getElementById('overlay2');
+  const currentProfileImage = document.getElementById('currentProfileImage');
+
+  form.style.display = 'block';
+  overlay2.style.display = 'block';
+
+  const savedProfileImage = localStorage.getItem('profileImage');
+  
+  if (savedProfileImage) {
+    currentProfileImage.src = savedProfileImage;
+  } else {
+   currentProfileImage.src = 'profile.jpg';
+  }
+}
+
+const searchInput = document.getElementById('search-input');
+const tagContainer = document.getElementById('tag-container');
+let tags = [];
+
+searchInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && this.value.trim() !== '') {
+    addTags([this.value.trim()]);
+    this.value = '';
+  }
+});
+
+function addTags(tagsArray) {
+  let tagsAdded = false;
+  
+  tagsArray.forEach(tagText => {
+    if (!tags.includes(tagText)) {
+      tags.push(tagText);
+      tagsAdded = true;
+    }
+  });
+
+  if (tagsAdded) {
+    renderTags();
+    fetchProducts();
+  }
+}
+
+function removeTag(tagText) {
+  tags = tags.filter(tag => tag !== tagText);
+  renderTags();
+  fetchProducts();
+}
+
+        function removeAllTags() {
+            tags = [];
+        }
+
+function renderTags() {
+  tagContainer.innerHTML = '';
+  tags.forEach(tag => {
+    const tagElement = document.createElement('span');
+    tagElement.classList.add('tag');
+    tagElement.innerHTML = `
+      ${tag}
+      <span class="tag-close" onclick="removeTag('${tag}')">&times;</span>
+    `;
+    tagContainer.appendChild(tagElement);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  handleHashChange();
+});
+
+function handleHashChange() {
+    const hash = window.location.hash.substring(1).trim();
+
+    if (hash) {
+        tags = [];
+        addTags([hash]);
+    }
+    renderTags();
+}
+
+window.addEventListener('hashchange', handleHashChange);
+
+function fetchProducts() {
+  if (tags.length === 0) {
+    console.log('No tags. Skipping fetch request.');
+    Array.from(productGrid.children).forEach(child => {
+      if (child.classList.contains('product-card')) {
+        productGrid.removeChild(child);
+      }
+    });
+    return;
+  }
+
+  const formattedTags = tags.map(formatTag);
+
+  fetch(`https://api.github.com/repos/${llllPDB}/contents`)
+    .then(response => response.json())
+    .then(files => {
+      const productFiles = files.filter(file => file.name.endsWith('.json'));
+
+      const fetchProductPromises = productFiles.map(file =>
+        fetch(file.download_url).then(response => response.json())
+      );
+
+      return Promise.all(fetchProductPromises);
+    })
+    .then(products => {
+      if (!products.length) {
+        console.log('No products available.');
+        return;
+      }
+
+      const ownerId = localStorage.getItem('OWNER_ID');
+      const productGrid = document.getElementById('productGrid');
+
+      Array.from(productGrid.children).forEach(child => {
+        if (child.classList.contains('product-card')) {
+          productGrid.removeChild(child);
+        }
+      });
+
+      const filteredProducts = products.filter(product => {
+        const productTags = product.Tags.map(tag => decodeURIComponent(tag));
+        const formattedTags = tags.map(tag => decodeURIComponent(formatTag(tag)));
+        const hasMatchingTag = formattedTags.every(tag => productTags.includes(tag));
+        const isSellerDifferent = product.Seller !== ownerId;
+
+        return hasMatchingTag && isSellerDifferent;
+      });
+
+      filteredProducts.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.classList.add('product-card');
+
+        const videoUrl = product.ProductVideo.replace('https://streamable.com/', 'https://streamable.com/e/');
+        const productID = product.ProductID;
+        const productTitle = product.ProductTitle;
+        const productDescription = product.ProductDescription;
+        const currentPrice = parseFloat(product.StartingAmount);
+        const expiryDateString = product.Expiry;
+
+        const year = parseInt(expiryDateString.substring(0, 4));
+        const month = parseInt(expiryDateString.substring(4, 6)) - 1;
+        const day = parseInt(expiryDateString.substring(6, 8));
+        const hour = parseInt(expiryDateString.substring(8, 10));
+        const minute = parseInt(expiryDateString.substring(10, 12));
+        const expiryDate = new Date(year, month, day, hour, minute);
+        const expiryDateUTC = expiryDate.getTime();
+        const nowUTC = Date.now();
+        const remainingSeconds = Math.floor((expiryDateUTC - nowUTC) / 1000);
+
+        productCard.innerHTML = `
+          <div class="product-video-container">
+            <iframe class="product-video" src="${videoUrl}" frameborder="0" allowfullscreen></iframe>
+          </div>
+          <div class="product-info">
+            <div class="product-title-icon">
+              <h2 class="product-title">${productTitle}</h2>
+              <div class="icons-container">
+                <span class="favorite"><i class="fa fa-star"></i></span>
+                <i class="fas fa-sync-alt refresh-icon"></i>
+              </div>
+            </div>
+            <p class="product-description">${productDescription}</p>
+            <p class="product-price" data-current-price="${currentPrice}">
+              Current Price: R${currentPrice}
+            </p>
+            <form class="bid-form">
+              <input type="number" class="bid-input" placeholder="Enter bid amount" step="0.01" min="${(currentPrice + 0.01).toFixed(2)}">
+              <button type="submit" class="bid-button">Bid</button>
+            </form>
+            <p class="countdown"></p>
+            <p class="bid-feedback" aria-live="polite"></p>
+            <p class="product-id" style="display: none;">${productID}</p>
+          </div>
+        `;
+
+        productGrid.appendChild(productCard);
+
+        const countdownElement = productCard.querySelector('.countdown');
+        let remainingSecondsForCard = remainingSeconds;
+
+        function tickDown() {
+          updateCountdown(remainingSecondsForCard, countdownElement, productCard);
+          remainingSecondsForCard--;
+        }
+
+        tickDown();
+        const countdownInterval = setInterval(() => {
+          if (remainingSecondsForCard <= 0) {
+            clearInterval(countdownInterval);
+            countdownElement.textContent = 'Auction has ended';
+            productCard.remove();
+          } else {
+            tickDown();
+          }
+        }, 1000);
+
+        productCard.querySelector('.bid-form').addEventListener('submit', function(e) {
+          e.preventDefault();
+
+          const favoriteElement = productCard.querySelector('.favorite');
+          if (!favoriteElement.classList.contains('clicked')) {
+            favoriteElement.classList.toggle('clicked');
+            const card = this.closest('.product-card');
+            productGrid.insertBefore(card, productGrid.firstChild);
+          }
+
+          const ownerId = localStorage.getItem('OWNER_ID');
+          if (!ownerId) {
+            EditProfile();
+            alert("PLEASE REGISTER ACCOUNT");
+            return;
+          }
+
+          const bidInput = this.querySelector('.bid-input');
+          const priceElement = this.parentNode.querySelector('.product-price');
+          const feedbackElement = this.parentNode.querySelector('.bid-feedback');
+          const currentPrice = parseFloat(priceElement.getAttribute('data-current-price'));
+          let bidAmount = parseFloat(bidInput.value);
+
+          if (bidAmount > currentPrice) {
+            priceElement.textContent = `Current Price: R${bidAmount}`;
+            priceElement.setAttribute('data-current-price', bidAmount);
+            bidInput.setAttribute('min', (bidAmount + 0.01).toFixed(2));
+
+            feedbackElement.textContent = 'Processing Bid';
+            feedbackElement.style.color = 'green';
+
+            const bidTime = getUTCTimestamp();
+            const productID1 = productCard.querySelector('.product-id').textContent.trim();
+            const contactId = localStorage.getItem('CONTACT_ID');
+            const contactId2 = localStorage.getItem('COUNTRY_CODE');
+            const contactDetails = `(${contactId2}) ${contactId}`;
+
+            const bidData = {
+              productID: productID1,
+              amount: bidAmount,
+              buyer: ownerId,
+              timeStamp: bidTime,
+              contactDetails: contactDetails
+            };
+
+            const bidFileName = `${productID1}_${ownerId}_${bidTime}.json`;
+            const bidFileContent = JSON.stringify(bidData, null, 2);
+            const encodedContent = btoa(bidFileContent);
+
+            fetch(`https://api.github.com/repos/${llllDB}/contents/${bidFileName}`, {
+              method: 'PUT',
+              headers: {
+                'Authorization': `token ${moo2}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                message: `Add bid data to ${bidFileName}`,
+                content: encodedContent
+              })
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(() => {
+              feedbackElement.textContent = 'Bid is being processed and recorded.';
+            })
+            .catch(error => {
+              feedbackElement.textContent = 'Bid processed but failed to record.';
+              feedbackElement.style.color = '#e74c3c';
+              console.error('Error adding bid:', error);
+            });
+          } else {
+            feedbackElement.textContent = 'Bid amount must be higher than the current price.';
+            feedbackElement.style.color = '#e74c3c';
+          }
+
+          bidInput.value = '';
+        });
+
+        productCard.querySelector('.refresh-icon').addEventListener('click', function() {
+          const refreshIcon = this;
+          refreshIcon.classList.add('rotate');
+          setTimeout(() => {
+            refreshIcon.classList.remove('rotate');
+          }, 4444);
+          refreshPrice(productID, productCard);
+        });
+
+        productCard.querySelector('.favorite').addEventListener('click', function() {
+          const productURL = `${window.location.origin}/BIDWELL/#${productID}`;
+          navigator.clipboard.writeText(productURL)
+            .then(() => {
+              alert('Link saved to clipboard');
+            })
+            .catch(err => {
+              console.error('Failed to copy product URL to clipboard:', err);
+            });
+        });
+
+        refreshPrice(productID, productCard);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching products from GitHub:', error);
+    });
+}
+
+function updateCountdown(remainingSeconds, countdownElement, productCard) {
+  if (remainingSeconds > 0) {
+    const days = Math.floor(remainingSeconds / (60 * 60 * 24));
+    const hours = Math.floor((remainingSeconds % (60 * 60 * 24)) / (60 * 60));
+    const minutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
+    const seconds = remainingSeconds % 60;
+
+    countdownElement.textContent = `Auction ends: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  } else {
+    countdownElement.textContent = 'Auction has ended';
+    productCard.remove();
+  }
+}
+
+function getUTCTimestamp() {
+  const now = new Date();
+
+  const year = now.getUTCFullYear();
+  const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(now.getUTCDate()).padStart(2, '0');
+  const hours = String(now.getUTCHours()).padStart(2, '0');
+  const minutes = String(now.getUTCMinutes()).padStart(2, '0');
+  const seconds = String(now.getUTCSeconds()).padStart(2, '0');
+  const formattedTimestamp = `${year}${month}${day}${hours}${minutes}${seconds}`;
+  return formattedTimestamp;
+}
+
+function refreshPrice(productID) {
+    const apiUrl = `https://api.github.com/repos/${llllDB}/contents`;
+    
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(files => {
+            const bidFiles = files.filter(file => file.name.startsWith(productID) && file.name.endsWith('.json'));
+
+            if (bidFiles.length === 0) {
+                return;
+            }
+
+            const fetchBidPromises = bidFiles.map(file =>
+                fetch(file.download_url).then(response => response.json())
+            );
+
+            return Promise.all(fetchBidPromises);
+        })
+        .then(bids => {
+            if (!bids || bids.length === 0) {
+                return;
+            }
+
+            const productCard = Array.from(document.querySelectorAll('.product-card'))
+                .find(card => card.querySelector('.product-id').textContent === productID);
+
+            if (!productCard) {
+                return;
+            }
+
+            const priceElement = productCard.querySelector('.product-price');
+            let highestBid = 0;
+            let chosenBid = null;
+            const storedOwnerId = localStorage.getItem('OWNER_ID');
+
+            bids.forEach(bid => {
+                const { amount, buyer } = bid;
+                if (amount > highestBid) {
+                    highestBid = amount;
+                    chosenBid = bid;
+                }
+            });
+
+            if (highestBid > 0) {
+                const ownerBid = chosenBid.buyer === storedOwnerId ? chosenBid.amount : null;
+
+                if (ownerBid !== null) {
+                    priceElement.textContent = `Your Bid: R${ownerBid}`;
+                } else {
+                    priceElement.textContent = `Current Price: R${highestBid}`;
+                }
+                priceElement.setAttribute('data-current-price', highestBid);
+
+                const bidInput = productCard.querySelector('.bid-input');
+                bidInput.setAttribute('min', highestBid + 0.01);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching bids from GitHub:', error);
+        });
+}
+
+window.addEventListener('scroll', function() {
+
+  var profileImage = document.querySelector(".profile-image");
+  var favoriteCount = document.querySelector(".favorite-count");
+  
+  if (window.scrollY > 0) {
+    profileImage.classList.add("fixed-profile-image");
+    favoriteCount.classList.add("fixed-favorite-count");
+  } else {
+    profileImage.classList.remove("fixed-profile-image");
+    favoriteCount.classList.remove("fixed-favorite-count");
+  }
+}, { passive: true });
+
+function createFile(llllPDB, productData, moo) {
+
+  const fileName = `${productData.ProductID}.json`;
+  const content = JSON.stringify(productData, null, 2);
+  const encodedContent = btoa(content);
+  const apiUrl = `https://api.github.com/repos/${llllPDB}/contents/${fileName}`;
+
+  return fetch(apiUrl, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `token ${moo}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      message: `Create file ${fileName}`,
+      content: encodedContent
+    })
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json();
+  });
+}
+
+    let currentCountry = null;
+    let currentProvince = null;
+    let banners = [];
+    let currentIndex = 0;
+
+    const bannerElement = document.getElementById('banner');
+
+    async function GeolocationTags() {
+        try {
+            const response = await fetch('https://ipapi.co/json/');
+            if (!response.ok) {
+                throw new Error(`Error fetching location data: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            currentCountry = data.country_name;
+            currentProvince = data.region;
+
+            banners = [
+                { src: 'BIDWELL1.png', tags: ['Livestock', currentCountry, currentProvince] },
+                { src: 'BIDWELL2.png', tags: ['Furniture', currentCountry, currentProvince] },
+                { src: 'BIDWELL3.png', tags: ['Automobiles', currentCountry, currentProvince] },
+                { src: 'BIDWELL4.jpg', tags: ['Firearms', currentCountry, currentProvince] },
+                { src: 'BIDWELL5.png', tags: ['Antiques', currentCountry, currentProvince] },
+                { src: 'BIDWELL6.png', tags: ['Jewellery', currentCountry, currentProvince] },
+                { src: 'BIDWELL7.png', tags: ['Art', currentCountry, currentProvince] },
+                { src: 'BIDWELL8.png', tags: ['Tools', currentCountry, currentProvince] },
+                { src: 'BIDWELL9.png', tags: [currentCountry, currentProvince] },
+                { src: 'BIDWELL10.png', tags: ['Electronics', currentCountry, currentProvince] }
+            ];
+
+            loadBannerIndex();
+
+            bannerElement.src = banners[currentIndex].src;
+            addTags(banners[currentIndex].tags);
+        } catch (error) {
+            console.error("Failed to fetch geolocation data:", error);
+        }
+    }
+
+    function saveBannerIndex() {
+        localStorage.setItem('bannerIndex', currentIndex);
+    }
+
+    function loadBannerIndex() {
+        const savedIndex = localStorage.getItem('bannerIndex');
+        currentIndex = savedIndex !== null ? parseInt(savedIndex, 10) : 0;
+    }
+
+    bannerElement.addEventListener('click', () => {
+        if (banners.length === 0) return;
+
+        currentIndex = (currentIndex + 1) % banners.length;
+        saveBannerIndex();
+
+        bannerElement.src = banners[currentIndex].src;
+        removeAllTags();
+        addTags(banners[currentIndex].tags);
+    });
+
+if (!window.location.hash) {
+    GeolocationTags();
+}
+
+  </script>
+</body>
+</html>
