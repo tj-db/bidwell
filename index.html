@@ -2134,6 +2134,7 @@ productCard.querySelector('.bid-form').addEventListener('submit', function(e) {
             const bidTime = getUTCTimestamp();
             const bidFileName = `${productID}_${ownerId}_${bidTime}.json`;
             const bidFileContent = {
+              productID: productID,
               amount: bidAmount,
               buyer: ownerId,
               timeStamp: bidTime,
